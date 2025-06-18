@@ -1,0 +1,89 @@
+extends index.pug
+
+block content
+  .container.mt-5
+    h1.text-center Editar Usuario
+
+    // Mensaje de éxito o error
+    if successMessage
+      .alert.alert-success= successMessage
+    if errorMessage
+      .alert.alert-danger= errorMessage
+
+    // Formulario para actualizar los datos del usuario
+    form#updateUserForm(action=`/usuarios/${usuario.dni}` method="PUT" class="needs-validation" novalidate)
+      .form-group
+        label(for="nombres") Nombres:
+        input.form-control(type="text" name="nombres" required placeholder="Juan Carlos" value=usuario.nombres)
+      
+      .form-group
+        label(for="apellidos") Apellidos:
+        input.form-control(type="text" name="apellidos" required placeholder="Pérez López" value=usuario.apellidos)
+
+      .form-group
+        label(for="edad") Edad:
+        input.form-control(type="number" name="edad" required placeholder="25" value=usuario.edad)
+
+      .form-group
+        label(for="correo") Correo Electrónico:
+        input.form-control(type="email" name="correo" required placeholder="example@email.com" value=usuario.correo)
+
+      .form-group
+        label(for="password") Contraseña:
+        input.form-control(type="password" name="password" id="password" required placeholder="******")  
+
+
+      .form-group
+        label(for="dni") DNI:
+        input.form-control(type="number" name="dni" required placeholder="12345678" value=usuario.dni disabled)
+
+      .form-group
+        label(for="rol") Rol:
+        select.form-control(name="rol" required)
+          option(value="estudiante" selected=(usuario.rol == 'estudiante')) Estudiante
+          option(value="tutor" selected=(usuario.rol == 'tutor')) Tutor
+          option(value="profesor" selected=(usuario.rol == 'profesor')) Profesor
+          option(value="administrador" selected=(usuario.rol == 'administrador')) Administrador
+
+      // Si el rol es "estudiante", muestra el campo "curso"
+      if usuario.rol == 'estudiante'
+        .form-group
+          label(for="curso") Curso:
+          input.form-control(type="text" name="curso" value=usuario.curso)
+
+      .form-group.mt-4
+        button.btn.btn-primary(type="submit") Actualizar Usuario
+
+    // Script para manejar el envío del formulario
+    script.
+      document.getElementById('updateUserForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Previene el envío tradicional del formulario
+
+        const formData = new FormData(this); // Crea un objeto FormData con los datos del formulario
+        const datos = Object.fromEntries(formData); // Convierte FormData a un objeto
+
+        try {
+          const response = await fetch(this.action, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datos), // Convierte el objeto a JSON
+          });
+
+          const result = await response.json(); // Espera la respuesta y la convierte a JSON
+
+          if (response.ok) {
+            // Si la respuesta es exitosa, muestra el mensaje
+            alert(result.message);
+            // Redirige o actualiza la página según sea necesario
+            window.location.href = '/usuarios'; // Descomentar para redirigir
+          } else {
+            // Muestra el mensaje de error
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('Error al actualizar el usuario:', error);
+          alert('Error al actualizar el usuario');
+        }
+      });

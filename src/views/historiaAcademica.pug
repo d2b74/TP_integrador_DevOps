@@ -1,0 +1,20 @@
+//- vistaNotas.pug
+extends index
+
+block content
+  .container
+    h1.text-center Mis Notas
+    .row
+      each nota in notas
+        .col-md-6
+          .card.mb-3
+            .card-body
+              h5.card-title= nota.materia.nombre
+              p.card-text 
+                | Nota: #{nota.calificacion} - #{nota.tipoEvaluacion}
+              small.text-muted
+                | Profesor: #{nota.profesor.nombres} #{nota.profesor.apellidos}
+              small.text-muted
+                | Fecha: #{new Date(nota.fecha).toLocaleDateString()}
+    .text-center.mt-4
+      button.btn.btn-secondary(type="button", onclick="window.history.back()") Volver

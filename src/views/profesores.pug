@@ -1,0 +1,82 @@
+extends index
+
+block content
+  h1.text-center.mt-4 Cursos, Materias, Alumnos y Notas
+
+  table.table.table-bordered.mt-4
+    thead
+      tr
+        th Curso
+        th Materia
+        th Alumno
+        th DNI
+        th Nota
+        th Acción
+    tbody
+      each materia in materias
+        tr(data-estudiante-id=materia.estudiante._id data-materia-id=materia.materiaId)
+          td= materia.curso
+          td= materia.materia
+          td= materia.estudiante.nombres + ' ' + materia.estudiante.apellidos
+          td= materia.estudiante.DNI
+          td.nota-columna= materia.calificacion != null ? materia.calificacion : 'Sin nota'
+          td
+            //- Formulario para cargar o actualizar la nota
+            form(action="/profesor" method="POST" onsubmit="return manejarNota(this);")
+              input(type="hidden" name="estudianteId" value=materia.estudiante._id)
+              input(type="hidden" name="materiaId" value=materia.materiaId)
+              input(type="hidden" name="notaActual" value=materia.calificacion != null ? materia.calificacion : '')
+              input(type="hidden" name="notaId" value=materia.notaid || '')
+              .input-group
+                input.form-control(type="number" name="calificacion" value=materia.calificacion != null ? materia.calificacion : '' placeholder="Calificación" required min="0" max="10")
+                select.form-control(name="tipoEvaluacion" required)
+                  option(value="Parcial" selected=materia.tipoEvaluacion == "Parcial") Parcial
+                  option(value="Final" selected=materia.tipoEvaluacion == "Final") Final
+                  option(value="Tarea" selected=materia.tipoEvaluacion == "Tarea") Tarea
+                  option(value="Examen" selected=materia.tipoEvaluacion == "Examen") Examen
+                  option(value="Otro" selected=materia.tipoEvaluacion == "Otro") Otro
+                input.form-control(type="text" name="observaciones" placeholder="Observaciones" value=materia.observaciones || '')
+                button.btn(type="submit" class=materia.calificacion == null ? 'btn-success' : 'btn-warning') 
+                  = materia.calificacion == null ? 'Cargar Nota' : 'Actualizar Nota'
+
+    script.
+      function manejarNota(form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+          data[key] = value;
+        });
+
+        // Cambia el método dependiendo de si hay o no una nota
+        const method = form.notaActual.value ? 'PUT' : 'POST';
+
+        fetch(form.action, {
+          method: method, // Establecer método dinámico
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Actualizar la nota en la tabla sin recargar la página
+            const row = document.querySelector(`tr[data-estudiante-id="${data.nota.estudiante}"][data-materia-id="${data.nota.materia}"]`);
+            if (row) {
+              const notaColumna = row.querySelector('.nota-columna');
+              notaColumna.textContent = data.nota.calificacion !== null ? data.nota.calificacion : 'Sin nota';
+
+              // Cambiar el botón a "Actualizar Nota"
+              const button = row.querySelector('button');
+              button.textContent = data.nota.calificacion !== null ? 'Actualizar Nota' : 'Cargar Nota';
+              button.classList.toggle('btn-success', data.nota.calificacion === null);
+              button.classList.toggle('btn-warning', data.nota.calificacion !== null);
+            }
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+
+        return false; // Evita el envío tradicional del formulario
+      }

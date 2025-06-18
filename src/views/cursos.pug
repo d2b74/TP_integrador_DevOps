@@ -1,0 +1,56 @@
+extends index
+
+block content
+  .container.mt-5
+    h1.text-center Estudiantes y Cursos
+    form(method="GET", action="/usuarios/cursos")
+      .row
+        .col-md-3
+          label(for="grado") Filtrar por Grado
+          select#grado.form-control(name="grado")
+            option(value="") Todos los grados
+            each grado in grados
+              option(value=grado) #{grado}
+        .col-md-3
+          label(for="nivel") Filtrar por Nivel
+          select#nivel.form-control(name="nivel")
+            option(value="") Todos los niveles
+            each nivel in niveles
+              option(value=nivel) #{nivel}
+        .col-md-3
+          label(for="division") Filtrar por División
+          select#division.form-control(name="division")
+            option(value="") Todas las divisiones
+            each division in divisiones
+              option(value=division) #{division}
+        .col-md-3
+          label(for="turno") Filtrar por Turno
+          select#turno.form-control(name="turno")
+            option(value="") Todos los turnos
+            option(value="maniana") Mañana
+            option(value="tarde") Tarde
+
+      button.btn.btn-primary(type="submit") Filtrar
+
+    table.table.table-striped.mt-4
+      thead
+        tr
+          th Nombres
+          th Apellidos
+          th Grado
+          th Nivel
+          th División
+          th Turno
+      tbody
+        if estudiantes.length > 0
+          each estudiante in estudiantes
+            tr
+              td= estudiante.nombres
+              td= estudiante.apellidos
+              td= estudiante.cursoAsignado ? estudiante.cursoAsignado.grado : 'Sin curso'
+              td= estudiante.cursoAsignado ? estudiante.cursoAsignado.nivel : 'Sin curso'
+              td= estudiante.cursoAsignado ? estudiante.cursoAsignado.division : 'Sin curso'
+              td= estudiante.cursoAsignado ? estudiante.cursoAsignado.turno : 'Sin curso'
+        else
+          tr
+            td(colspan="6") No hay estudiantes encontrados

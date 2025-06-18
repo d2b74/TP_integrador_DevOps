@@ -1,0 +1,28 @@
+extends index 
+
+block content
+
+  .container.mt-5
+    if usuarioAutenticado
+      h1.text-center.mb-4 Gestion de Materias 
+      p.text-center.text-muted Tu rol: #{usuarioAutenticado.rol}
+      .row.justify-content-center.mt-4
+        //- Opciones para Administrativos
+        if usuarioAutenticado.rol === 'administrativo'
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='usuarios/materias')
+              .card.card-role.shadow-lg.border-primary
+                .card-body.text-center
+                  i.bi.bi-journal-text.d-block.mb-2(style='font-size: 2.5rem; color: #17a2b8;')
+                  h5.card-title Listar materias
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='usuarios/materias/nueva')
+              .card.card-role.shadow-lg.border-success
+                .card-body.text-center
+                  i.bi.bi-journal-text.d-block.mb-2(style='font-size: 2.5rem; color: #17a2b8;')
+                  h5.card-title Agregar Materias
+
+
+
+
+

@@ -1,0 +1,113 @@
+/* Imagen de fondo */
+
+.home-container {
+    position: relative;
+    height: 70vh;
+    background: url('/images/fondo.jpg') no-repeat center center/cover;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+  }
+  
+  /* Fondo oscuro superpuesto */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Oscurece un poco el fondo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Animación para el nombre de la escuela */
+  .school-name {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    animation: fadeIn 2s ease-in-out, slideIn 2s ease-in-out;
+  }
+  
+  /* Eslogan */
+  .tagline {
+    font-size: 1.5rem;
+    margin: 10px 0 20px;
+    animation: fadeIn 2s ease-in-out 1s;
+  }
+  
+  /* Animaciones */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  
+ 
+  .card-role {
+    height: 200px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-role:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .card-link {
+    text-decoration: none;
+  }
+  
+  .card-link:hover {
+    text-decoration: none;
+  }
+  
+  .row {
+    margin-top: 30px;
+  }
+  
+  .col-md-3 {
+    display: flex;
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    .col-md-3 {
+      width: 100%;
+    }
+  }
+  

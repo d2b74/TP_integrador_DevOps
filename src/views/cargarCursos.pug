@@ -1,0 +1,29 @@
+extends index 
+
+block content
+    .container.mt-5
+        h1.text-center.mb-4 Lista de Cursos
+
+        // Tabla de cursos
+        table.table.table-striped
+            thead
+            tr
+                
+                th Nivel
+                th Grado
+                th División
+                th Turno
+                th Acción
+            tbody
+            each curso in cursos
+                tr
+                
+                td= curso.nivel
+                td= curso.grado
+                td= curso.division
+                td= curso.turno
+                td
+                    a.btn.btn-primary.btn-sm(href=`/usuarios/cursos/${curso._id}`) Ver Detalles
+
+        // Botón para volver al inicio
+        a.btn.btn-secondary.mt-4(href="/home2") Volver al Inicio

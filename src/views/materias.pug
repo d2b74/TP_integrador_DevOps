@@ -1,0 +1,59 @@
+extends index
+
+block content
+    .container.mt-5
+        h1.text-center.text-primary Lista de Materias
+
+        //- Mensaje de éxito o error
+        if mensaje
+            .alert.alert-success.text-center= mensaje
+        if error
+            .alert.alert-danger.text-center= error
+
+        //- Tabla de materias
+        table.table.table-striped.mt-4
+            thead
+                tr
+                    th Nombre
+                    th Turno 
+                    th Nivel
+                    th Grado
+                    th Division
+                    th Acción
+            tbody
+                each materia in materias
+                    tr
+                        td= materia.nombre
+                        td= materia.curso ? materia.curso.turno : 'No asignado'
+                        td= materia.curso ? materia.curso.nivel : 'No asignado'
+                        td= materia.curso ? materia.curso.grado : 'No asignado'
+                        td= materia.curso ? materia.curso.division : 'No asignado'
+                        td
+                            a.btn.btn-warning(href=`/usuarios/materias/editar/${materia._id}`) Editar
+                            button.btn.btn-danger.ml-2(onclick=`eliminarMateria('${materia._id}')`) Eliminar
+
+        //- Enlace para agregar nueva materia
+        .text-center.mt-4
+            a.btn.btn-primary(href="/usuarios/materias/nueva") Cargar Nueva Materia
+
+        //- Script para manejar la eliminación
+        script.
+            function eliminarMateria(id) {
+                if (confirm('¿Estás seguro de que quieres eliminar esta materia?')) {
+                    fetch(`/usuarios/materias/eliminar/${id}`, { // Aquí usamos `id` en lugar de `materia._id`
+                        method: 'DELETE',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Materia eliminada exitosamente');
+                            location.reload(); // Recargar la página para reflejar los cambios
+                        } else {
+                            alert('Error al eliminar Materia');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un problema al eliminar materia.');
+                    });
+                }
+            }

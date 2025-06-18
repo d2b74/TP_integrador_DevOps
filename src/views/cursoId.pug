@@ -1,0 +1,26 @@
+extends index
+
+block content
+    .container.mt-5
+        h1.text-center.mb-4= curso.nombre
+
+        // Detalles del curso
+        .card
+            .card-body
+            h5.card-title Detalles del Curso
+            p.card-text Nivel: #{curso.nivel}
+            p.card-text Grado: #{curso.grado}
+            p.card-text División: #{curso.division}
+            p.card-text Turno: #{curso.turno}
+
+        // Materias del curso
+        if curso.materias.length > 0
+            h2.text-center.mt-4 Materias
+            ul.list-group
+            each materia in curso.materias
+                li.list-group-item.text-center= materia.nombre
+        else
+            p.text-muted.text-center.mt-4 Este curso no tiene materias asignadas.
+
+        // Botón para volver a la lista de cursos
+        a.btn.btn-secondary.mt-4(href="/usuarios/cursos") Volver a la Lista de Cursos
