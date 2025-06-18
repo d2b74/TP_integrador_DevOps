@@ -1,0 +1,50 @@
+extends index.pug
+
+block content
+  .container.mt-5
+    h1.text-center Lista de Usuarios
+    if usuarios.length
+      table.table.table-striped.table-hover
+        thead
+          tr
+            th Nombre
+            th Apellidos
+            th DNI
+            th Rol
+            th Acciones
+        tbody
+          each usuario in usuarios
+            tr
+              td= usuario.nombres
+              td= usuario.apellidos
+              td= usuario.dni
+              td= usuario.rol
+              td
+                // Botón de Modificar
+                a.btn.btn-warning.btn-sm(href=`/usuarios/${usuario.dni}/editar`) Modificar
+                // Botón de Eliminar con JavaScript
+                button.btn.btn-danger.btn-sm(onclick=`eliminarUsuario('${usuario.dni}')`) Eliminar
+    else
+      p.text-center No hay usuarios disponibles.
+
+    // Script para hacer la petición DELETE
+    script.
+      function eliminarUsuario(dni) {
+        if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+          fetch(`/usuarios/${dni}`, {
+            method: 'DELETE',
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('Usuario eliminado exitosamente');
+              location.reload(); // Recargar la página para reflejar los cambios
+            } else {
+              alert('Error al eliminar el usuario');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un problema al eliminar el usuario.');
+          });
+        }
+      }

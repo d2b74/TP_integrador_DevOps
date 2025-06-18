@@ -1,0 +1,39 @@
+extends index  
+
+block content
+  .container.mt-5
+    h1.text-center Estudiantes Asociados a Tutor
+
+    // Mensaje de éxito o error
+    if successMessage
+      .alert.alert-success= successMessage
+    if errorMessage
+      .alert.alert-danger= errorMessage
+
+    // Tabla para listar los estudiantes
+    table.table.table-striped.table-bordered.mt-4
+      thead
+        tr
+          th Nombre
+          th Apellidos
+          th Edad
+          th Correo Electrónico
+          th Curso
+          th Turno
+          th Acciones
+      tbody
+        each estudiante in estudiantes
+          tr
+            td= estudiante.nombres
+            td= estudiante.apellidos
+            td= estudiante.edad
+            td= estudiante.correo
+            td= estudiante.curso
+            td= estudiante.turno
+            td
+              a.btn.btn-info(href=`/tutor/${estudiante.dni}`) Ver Notas  
+
+    // Enlace para volver a la página de tutores o al inicio
+    .text-center.mt-4
+     button.btn.btn-secondary(type="button", onclick="window.history.back()") Volver
+

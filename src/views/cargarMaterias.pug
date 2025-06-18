@@ -1,0 +1,134 @@
+extends index
+
+block content
+    .container.mt-5
+        h1.text-center.text-primary Cargar Materia
+
+        //- Mensaje de éxito o error
+        if mensaje
+            .alert.alert-success.text-center= mensaje
+        if error
+            .alert.alert-danger.text-center= error
+
+        //- Formulario de carga de materia
+        form(action="/usuarios/materias/nueva" method="POST" class="mt-4 needs-validation" onsubmit="return  manejarCargaMateria(this);")
+            .mb-3
+                label(for="nombre") Nombre de la Materia
+                input#nombre.form-control(type="text" name="nombre" placeholder="Escribe el nombre de la materia" list="materiasLista" required)
+                datalist#materiasLista
+                    if materias && materias.length
+                        each materia in materias
+                            option(value=materia.nombre)
+                    else
+                        option(value="No hay materias disponibles")
+
+            .mb-3
+                label(for="nivel") Nivel
+                select#nivel.form-select(name="nivel" required)
+                    option(value="" disabled selected) Selecciona un nivel
+                    if niveles && niveles.length
+                        each nivel in niveles
+                            option(value=nivel)= nivel
+                    else
+                        option(value="" disabled) No hay niveles disponibles
+            .mb-3
+                label(for="grado") Grado
+                select#grado.form-select(name="grado" required)
+                    option(value="" disabled selected) Selecciona un grado
+                    if grados && grados.length
+                        each grado in grados
+                            option(value=grado)= grado
+                    else
+                        option(value="" disabled) No hay grados disponibles
+    
+            .mb-3
+                label(for="division") Division
+                select#grado.form-select(name="division" required)
+                    option(value="" disabled selected) Selecciona una division
+                    if divisiones && divisiones.length
+                        each division in divisiones
+                            option(value=division)= division
+                    else
+                        option(value="" disabled) No hay division disponibles
+
+            .mb-3
+                label(for="turno") Turno
+                select#grado.form-select(name="turno" required)
+                    option(value="" disabled selected) Selecciona un turno
+                    if turnos && turnos.length
+                        each turno in turnos
+                            option(value=turno)=turno
+                    else
+                        option(value="" disabled) No hay turnos disponibles 
+            .mb-3
+                label(for="profesor") Profesor
+                select#profesor.form-select(name="profesor")
+                    option(value="" disabled selected) Selecciona un profesor
+                    if profesores && profesores.length
+                        each profesor in profesores
+                            option(value=profesor._id)= `${profesor.nombres} ${profesor.apellidos}`
+                    else
+                        option(value="" disabled) No hay profesores disponibles                           
+
+            .mb-3
+                label(for="horario[dia]") Día de la Semana
+                select#horarioDia.form-select(name="horario[dia]")
+                    option(value="" disabled selected) Selecciona un día
+                    option(value="Lunes") Lunes
+                    option(value="Martes") Martes
+                    option(value="Miércoles") Miércoles
+                    option(value="Jueves") Jueves
+                    option(value="Viernes") Viernes
+            .mb-3
+                label(for="horario[horaInicio]") Hora de Inicio
+                input#horaInicio.form-control(type="time" name="horario[horaInicio]")
+            .mb-3
+                label(for="horario[horaFin]") Hora de Fin
+                input#horaFin.form-control(type="time" name="horario[horaFin]")
+            button.btn.btn-primary(type="submit" id="submitBtn") Cargar Materia
+
+            //- Enlace para volver
+            .text-center.mt-3
+                a.btn.btn-secondary(href="/usuarios/materias") Ver Todas las Materias
+
+
+        script.
+            function manejarCargaMateria(form) {
+                const formData = new FormData(form);
+                const data = {};
+
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(async response => {
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.mensaje);
+                                location.href = '/usuarios/materias';
+                            } else {
+                                alert(result.error || 'Hubo un problema al procesar la solicitud.');
+                            }
+                        } else {
+                            throw new Error('Respuesta no es JSON.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la petición:', error);
+                        alert('Hubo un problema al enviar la solicitud.');
+                    });
+
+
+
+                return false; // Evitar el comportamiento por defecto del formulario
+            }
+
