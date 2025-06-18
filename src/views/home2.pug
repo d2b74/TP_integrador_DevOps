@@ -1,0 +1,70 @@
+extends index 
+
+block content
+
+  .container.mt-5
+    if usuarioAutenticado
+      h1.text-center.mb-4 ¡Bienvenido, #{usuarioAutenticado.nombres}!
+      p.text-center.text-muted Tu rol: #{usuarioAutenticado.rol}
+      .row.justify-content-center.mt-4
+        //- Opciones para Administrativos
+        if usuarioAutenticado.rol === 'administrativo'
+          // Gestión de Usuarios
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/usuarios')
+              .card.card-role.shadow-lg.border-primary
+                .card-body.text-center
+                  i.bi.bi-people-fill.d-block.mb-2(style='font-size: 2.5rem; color: #007bff;')
+                  h5.card-title Gestión de Usuarios
+
+          // Gestión de Estudiantes
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/usuarios/estudiantes')
+              .card.card-role.shadow-lg.border-success
+                .card-body.text-center
+                  i.bi.bi-person-fill.d-block.mb-2(style='font-size: 2.5rem; color: #28a745;')
+                  h5.card-title Gestión de Estudiantes
+
+          // Gestión de Cursos
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/usuarios/cursos')
+              .card.card-role.shadow-lg.border-warning
+                .card-body.text-center
+                  i.bi.bi-bookmark-check.d-block.mb-2(style='font-size: 2.5rem; color: #ffc107;')
+                  h5.card-title Gestión de Cursos
+
+          // Gestión de Materias
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/materias')
+              .card.card-role.shadow-lg.border-info
+                .card-body.text-center
+                  i.bi.bi-journal-text.d-block.mb-2(style='font-size: 2.5rem; color: #17a2b8;')
+                  h5.card-title Gestión de Materias
+
+
+        //- Opciones para Profesores
+        if usuarioAutenticado.rol === 'profesor'
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/profesor')
+              .card.card-role.shadow-lg.border-purple
+                .card-body.text-center
+                  i.bi.bi-chalkboard-teacher.d-block.mb-2(style='font-size: 2.5rem; color: #6f42c1;')
+                  h5.card-title Gestión de Clases
+
+        //- Opciones para Estudiantes
+        if usuarioAutenticado.rol === 'estudiante'
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/notas')
+              .card.card-role.shadow-lg.border-danger
+                .card-body.text-center
+                  i.bi.bi-journal-check.d-block.mb-2(style='font-size: 2.5rem; color: #e83e8c;')
+                  h5.card-title Ver Notas
+
+        //- Opciones para Tutores
+        if usuarioAutenticado.rol === 'tutor'
+          .col-md-3.col-sm-6.mb-4
+            a.card-link(href='/tutor')
+              .card.card-role.shadow-lg.border-orange
+                .card-body.text-center
+                  i.bi.bi-person-lines-fill.d-block.mb-2(style='font-size: 2.5rem; color: #fd7e14;')
+                  h5.card-title Información del Tutor
