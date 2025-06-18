@@ -1,0 +1,28 @@
+extends index 
+
+block content
+
+  .container.mt-5
+    if usuarioAutenticado
+      h1.text-center.mb-4 Gestion de Usuarios
+      p.text-center.text-muted Tu rol: #{usuarioAutenticado.rol}
+      .row.justify-content-center.mt-4
+        //- Opciones para Administrativos
+        if usuarioAutenticado.rol === 'administrativo'
+            .col-md-3.col-sm-6.mb-4
+              a.card-link(href='/usuarios/listar')
+                .card.card-role.shadow-lg.border-primary
+                  .card-body.text-center
+                    i.bi.bi-people-fill.d-block.mb-2(style='font-size: 2.5rem; color: #007bff;')
+                    h5.card-title Listar Usuarios
+            .col-md-3.col-sm-6.mb-4
+              a.card-link(href='/registro')
+                .card.card-role.shadow-lg.border-success
+                  .card-body.text-center
+                    i.bi.bi-person-plus-fill.d-block.mb-2(style='font-size: 2.5rem; color: #28a745;')
+                    h5.card-title Registrar Usuarios
+
+
+
+
+

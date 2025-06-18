@@ -1,0 +1,159 @@
+extends index
+
+block content
+    .container.mt-5
+        h1.text-center.text-primary Editar Materia
+
+        //- Mensaje de éxito o error
+        if mensaje
+            .alert.alert-success.text-center= mensaje
+        if error
+            .alert.alert-danger.text-center= error
+        //- Formulario de edición
+        form#updateUserForm(action=`/usuarios/materias/editar/${materia._id} ` method="PUT" class="needs-validation" novalidate)
+        
+            .mb-3
+                label(for="nombre") Nombre de la Materia
+                input#nombre.form-control(type="text" name="nombre" readonly value=materia.nombre)
+
+            .mb-3
+                label(for="nivel") Nivel
+                select#nivel.form-select(name="nivel" required)
+                    option(value="" disabled selected) Selecciona un nivel
+                    if niveles && niveles.length
+                        each nivel in niveles
+                            option(value=nivel selected=(materia.nivel === nivel))= nivel
+                    else
+                        option(value="" disabled) No hay niveles disponibles
+            .mb-3
+                label(for="grado") Grado
+                select#grado.form-select(name="grado")
+                    option(value="" disabled selected) Selecciona un grado
+                    if grados && grados.length
+                        each grado in grados
+                            option(value=grado selected=(materia.grado === grado))= grado
+                    else
+                        option(value="" disabled) No hay grados disponibles
+            .mb-3
+                label(for="division") Division
+                select#grado.form-select(name="division" )
+                    option(value="" disabled selected) Selecciona una division
+                    if divisiones && divisiones.length
+                        each division in divisiones
+                            option(value=division selected=(materia.division === division))= division
+                    else
+                        option(value="" disabled) No hay division disponibles
+            .mb-3
+                label(for="turno") Turno
+                select#grado.form-select(name="turno" )
+                    option(value="" disabled selected) Selecciona un turno
+                    if turnos && turnos.length
+                        each turno in turnos
+                            option(value=turno selected=(materia.turno === turno))= turno
+                    else
+                        option(value="" disabled) No hay turnos disponibles 
+                        
+
+            .mb-3
+                label(for="profesor") Profesor
+                select#profesor.form-select(name="profesor")
+                    option(value="" disabled selected) Selecciona un profesor
+                    if profesores && profesores.length
+                        each profesor in profesores
+                            option(value=profesor._id selected=(materia.profesor && materia.profesor._id === profesor._id))= `${profesor.nombres} ${profesor.apellidos}`
+                    else
+                        option(value="" disabled) No hay profesores disponibles 
+                        
+
+            .mb-3
+                label(for="horario[dia]") Día de la Semana
+                select#horarioDia.form-select(name="horario[dia]")
+                    option(value="" disabled selected) Selecciona un día
+                    option(value="Lunes" selected=(materia.horario.dia === 'Lunes')) Lunes
+                    option(value="Martes" selected=(materia.horario.dia === 'Martes')) Martes
+                    option(value="Miércoles" selected=(materia.horario.dia === 'Miércoles')) Miércoles
+                    option(value="Jueves" selected=(materia.horario.dia === 'Jueves')) Jueves
+                    option(value="Viernes" selected=(materia.horario.dia === 'Viernes')) Viernes
+
+            .mb-3
+                label(for="horario[horaInicio]") Hora de Inicio
+                input#horaInicio.form-control(type="time" name="horario[horaInicio]" value=materia.horario.horaInicio)
+
+            .mb-3
+                label(for="horario[horaFin]") Hora de Fin
+                input#horaFin.form-control(type="time" name="horario[horaFin]" value=materia.horario.horaFin)
+
+            button.btn.btn-primary(type="submit" id="submitBtn") Guardar Cambios
+
+
+
+        script.
+
+            document.addEventListener('DOMContentLoaded', async function () {
+                const formEditar = document.getElementById('updateUserForm');
+                const idMateria = formEditar.dataset.id; // Asume que el ID de la materia está en un atributo `data-id`
+
+                try {
+                    // Hacer la solicitud para obtener los datos de la materia
+                     const response = await fetch(this.action, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(datos), // Enviar los datos como JSON
+                    });                   
+                    
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        const { materia } = data;
+
+                        // Precargar los datos en los campos del formulario
+                        formEditar.nombre.value = materia.nombre || '';
+                        formEditar.profesor.value = materia.usuario.profesor?._id || '';
+                        formEditar.horario.value = materia.horario || '';
+                        formEditar.nivel.value = materia.curso ? materia.curso.nivel || '';
+                        formEditar.grado.value = materia.curso ? materia.curso.grado || '';
+                        formEditar.division.value = materia.curso ? materia.curso.division ;
+                        formEditar.turno.value = materia.curso ? materia.curso.turno || '';
+                    } else {
+                        console.log('Error al obtener la materia.',data.error)
+                        alert(data.error || 'Error al obtener la materia.');
+                    }
+                } catch (error) {
+                    console.error('Error al cargar los datos de la materia:', error);
+                    alert('Error al cargar los datos de la materia.');
+                }
+            });
+
+        script.
+
+            document.getElementById('updateUserForm').addEventListener('submit', async function (event) {
+                event.preventDefault(); // Evita el envío tradicional del formulario
+
+                const formData = new FormData(this); // Captura los datos del formulario
+                const datos = Object.fromEntries(formData); // Convierte FormData a un objeto
+
+                try {
+                    const response = await fetch(this.action, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(datos), // Enviar los datos como JSON
+                    });
+
+                    const result = await response.json(); // Parsear la respuesta JSON
+
+                    if (response.ok) {
+                        alert(result.message); // Muestra mensaje de éxito
+                        window.location.href = '/usuarios/materias';
+                    } else {
+                        // Muestra mensaje de error enviado por el backend
+                        alert(result.message || 'Error al actualizar la materia');
+                    }
+                } catch (error) {
+                    console.error('Error al conectar con el servidor:', error);
+                    alert('Error al conectar con el servidor. Intenta nuevamente.');
+                }
+            });
