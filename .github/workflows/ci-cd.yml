@@ -50,6 +50,7 @@ jobs:
 
       - name: Desplegar en Railway
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}  # <- Project ID de tu proyecto Railway
-        run: railway up --yes  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}         # Tu token de usuario
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}  # El ID de tu proyecto Railway
+        run: railway deploy -- --yes
+  
