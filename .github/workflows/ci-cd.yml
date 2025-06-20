@@ -48,13 +48,9 @@ jobs:
       - name: Instalar Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
 
-      - name: Login en Railway
-        run: railway login --token $RAILWAY_PROJECT_TOKEN
-        env:
-          RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
 
       - name: Desplegar en Railway
         env:
-          RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           CI: true
         run: railway up
