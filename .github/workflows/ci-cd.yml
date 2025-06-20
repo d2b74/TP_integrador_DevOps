@@ -52,4 +52,4 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}  # <- Project ID de tu proyecto Railway
-        run: railway up -- --yes  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar
+        run: railway up --yes  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar  # La CLI usará automáticamente RAILWAY_PROJECT_ID para saber dónde desplegar
