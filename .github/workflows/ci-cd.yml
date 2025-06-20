@@ -53,4 +53,4 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           CI: true
-        run: railway up
+        run: railway up --service TP_integrador_DevOps
