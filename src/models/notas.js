@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const NotaSchema = new mongoose.Schema({
   estudiante: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Usuario', // Referencia al estudiante (usuario con rol "estudiante")
+    ref: 'Usuario', // Referencia al estudiante    (usuario con rol "estudiante")
     required: true
   },
   materia: {
