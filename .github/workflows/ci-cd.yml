@@ -42,11 +42,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
       - name: Instalar Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
 
-      - name: Autenticarse en Railway
-        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
-
       - name: Desplegar en Railway
-        run: railway up
+        run: railway up --yes
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
