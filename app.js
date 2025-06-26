@@ -1,4 +1,5 @@
 const express = require('express');
+const client = require('prom-client');
 const app = express();
 const path = require('path'); 
 const conectarDB = require('./src/config/db.js'); // Importar la función de conexión a la base de datos
@@ -13,6 +14,15 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'src/views')); // Carpeta donde estarán las vistas Pug
 app.use(express.static('public'));
 
+// Inicializa el registro de métricas
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics();
+
+// Endpoint para Prometheus
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
+});
 
 // Middleware para manejar JSON y formularios
 app.use(express.json());
